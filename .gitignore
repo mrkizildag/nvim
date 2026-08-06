@@ -1,0 +1,8 @@
+# Gradle user home created at runtime by the jdtls setup in lua/plugins/lsp.lua
+gradle-home/
+
+# Neovim runtime log
+nvim.log
+
+# macOS
+.DS_Store
