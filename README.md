@@ -44,6 +44,127 @@ lua/plugins/             -- one file per plugin
 lazy-lock.json           -- pinned plugin revisions (committed on purpose)
 ```
 
+## Keybindings
+
+Leader is `<Space>`. Mode column: **n** normal, **v** visual, **x** visual-block/charwise,
+**i** insert. Anything not listed is stock Neovim.
+
+### Editing
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `J` | v | Move selection down one line, reindent |
+| `K` | v | Move selection up one line, reindent |
+| `<C-d>` | n | Half page down, cursor recentered |
+| `<C-u>` | n | Half page up, cursor recentered |
+
+### Paste
+
+Reindent-aware paste from [smart-paste.nvim](https://github.com/nemanjamalesija/smart-paste.nvim) —
+same keys as builtin paste, but the pasted text is fitted to the surrounding indentation.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `p` / `P` | n, x | Paste after / before |
+| `gp` / `gP` | n | Paste after / before, cursor follows to end of pasted text |
+| `]p` / `[p` | n | Paste after / before, charwise text forced onto its own line |
+
+### Find (telescope)
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>ff` | n | Find files |
+| `<leader>fg` | n | Live grep |
+| `<leader>fb` | n | Buffers |
+| `<leader>fh` | n | Help tags |
+
+### LSP
+
+Buffer-local — registered on `LspAttach`, so they only exist where a server is running.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `gd` | n | Go to definition |
+| `gD` | n | Go to declaration |
+| `grr` | n | Find references |
+| `gri` | n | Go to implementation |
+| `grn` | n | Rename symbol |
+| `gra` | n, x | Code action |
+| `K` | n | Hover docs |
+
+`K` is hover in normal mode and "move selection up" in visual mode — different modes,
+no conflict.
+
+### Diagnostics
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `gl` | n | Show line diagnostics in a float |
+| `[d` | n | Previous diagnostic (opens float) |
+| `]d` | n | Next diagnostic (opens float) |
+
+### Completion (blink.cmp)
+
+`super-tab` preset — Tab accepts.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<Tab>` | i | Accept selected item, or jump to next snippet placeholder |
+| `<S-Tab>` | i | Jump to previous snippet placeholder |
+| `<C-space>` | i | Open menu, then toggle documentation |
+| `<C-n>` / `<Down>` | i | Next item |
+| `<C-p>` / `<Up>` | i | Previous item |
+| `<C-e>` | i | Cancel / hide menu |
+| `<C-b>` / `<C-f>` | i | Scroll documentation up / down |
+| `<C-k>` | i | Toggle signature help |
+
+### Format
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>F` | n, v | Format buffer via conform (async) |
+
+### Git
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>gs` | n, v | Open fugitive Git panel (`:Git`) |
+
+Gitsigns is signs-only here (`+ ~ _ ‾`), no keymaps.
+
+### Files and history
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>ya` | n, v | Open yazi at the current file |
+| `<leader>u` | n | Toggle undotree |
+
+### Run and tasks
+
+`<leader>rf` runs a single self-contained file via code_runner; the rest drive overseer.
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<leader>rf` | n | Run current file |
+| `<leader>rt` | n | Write buffer, then pick an overseer task |
+| `<leader>rr` | n | Restart most recent task |
+| `<leader>ro` | n | Toggle task list |
+| `<leader>ra` | n | Task action menu |
+
+### tmux panes
+
+Seamless movement between Neovim splits and tmux panes ([tmux.nvim](https://github.com/aserowy/tmux.nvim)).
+
+| Key | Mode | Action |
+| --- | --- | --- |
+| `<C-h/j/k/l>` | n | Navigate left / down / up / right |
+| `<M-h/j/k/l>` | n | Resize pane (Alt) |
+| `<C-M-h/j/k/l>` | n | Swap pane (Ctrl+Alt) |
+
+### Themes
+
+No keybinding — run `:Themery` to pick a colorscheme.
+
 ## Language servers
 
 Installed automatically via mason + mason-lspconfig:

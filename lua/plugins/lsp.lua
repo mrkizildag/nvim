@@ -422,6 +422,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
         "stylua",
+        "prettierd",
       })
 
       require("mason-tool-installer").setup({
@@ -446,6 +447,13 @@ return {
       -- not via mason. Uses nvim-lspconfig's bundled lsp/ty.lua (cmd = { "ty", "server" }),
       -- which auto-discovers each project's [tool.ty] config + .venv via root markers.
       vim.lsp.enable("ty")
+
+      -- Neovim >= 0.11 ships with virtual_text off, so diagnostics are otherwise only a
+      -- gutter sign + underline and you have to `gl` to read the message.
+      vim.diagnostic.config({
+        virtual_text = { source = "if_many", spacing = 2 },
+        severity_sort = true,
+      })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("mrk-lsp-behavior", { clear = true }),

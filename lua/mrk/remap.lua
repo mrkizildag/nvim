@@ -23,7 +23,7 @@ vim.keymap.set({ "n", "v" }, "<leader>gs", "<cmd>Git<cr>", { desc = "Open Git Pa
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
 -- formatting
-vim.keymap.set({ "n", "v" }, "<leader>f", function()
+vim.keymap.set({ "n", "v" }, "<leader>F", function()
 	require("conform").format({ async = true })
 end, { desc = "Format buffer" })
 

@@ -26,6 +26,8 @@ return {
       "python",
       "scss",
       "sql",
+      -- `typescript` covers .ts; .tsx (filetype typescriptreact) needs its own parser.
+      "tsx",
       "typescript",
       "vim",
       "vue",
