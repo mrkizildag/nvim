@@ -317,6 +317,12 @@ return {
         -- Mac files are mounted at identical paths in the machine, so URIs line up.
         -- Revert to `clangd = {}` to use the local macOS clangd again.
         clangd = { cmd = { "orb", "-m", "eist", "clangd", "--background-index" } },
+        -- Lint diagnostics for JS/TS. `ts_ls` only reports type errors, so without this
+        -- the eslint configs in the repo (frontend/eslint.config.mjs and friends) are
+        -- invisible in the editor. Preferred over nvim-lint because it is a real server:
+        -- code actions and `:LspEslintFixAll` come with it, and it only attaches in
+        -- projects that actually have an eslint config.
+        eslint = {},
         gopls = {},
         jdtls = {
           cmd = jdtls_cmd(jdtls_java_executable),
@@ -446,6 +452,20 @@ return {
       -- `servers` table because it's installed as a global uv tool (`uv tool install ty`),
       -- not via mason. Uses nvim-lspconfig's bundled lsp/ty.lua (cmd = { "ty", "server" }),
       -- which auto-discovers each project's [tool.ty] config + .venv via root markers.
+      --
+      -- ty also advertises definition/references/hover/completion, all of which
+      -- basedpyright already answers. Left alone, `gd` returns the same location twice,
+      -- `grr` lists every reference twice, and blink shows two identical entries per
+      -- symbol. Clear those so the split described above is actually enforced;
+      -- diagnostics arrive via publishDiagnostics and are unaffected.
+      vim.lsp.config("ty", {
+        on_attach = function(client)
+          client.server_capabilities.definitionProvider = false
+          client.server_capabilities.referencesProvider = false
+          client.server_capabilities.hoverProvider = false
+          client.server_capabilities.completionProvider = nil
+        end,
+      })
       vim.lsp.enable("ty")
 
       -- Neovim >= 0.11 ships with virtual_text off, so diagnostics are otherwise only a
