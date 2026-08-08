@@ -12,6 +12,18 @@ vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find f
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
+-- Symbol search. `lsp_document_symbols` is the fuzzy version of the built-in `gO`
+-- (which only dumps to the location list). The workspace picker is the "dynamic"
+-- one so the query is re-sent to the server on every keystroke instead of filtering
+-- a single up-front result set.
+-- Aerial's picker instead of `lsp_document_symbols`: it renders the symbol path and
+-- falls back to treesitter, so it also works in buffers with no server attached.
+-- It is current-buffer only, so the project-wide picker below stays on telescope's.
+vim.keymap.set("n", "<leader>fs", function()
+	require("telescope").load_extension("aerial")
+	require("telescope").extensions.aerial.aerial()
+end, { desc = "Telescope symbols (file)" })
+vim.keymap.set("n", "<leader>fS", builtin.lsp_dynamic_workspace_symbols, { desc = "Telescope symbols (project)" })
 
 -- yazi.nvim
 vim.keymap.set({ "n", "v" }, "<leader>ya", "<cmd>Yazi<cr>", { desc = "Open yazi at the current file" })
