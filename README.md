@@ -49,6 +49,11 @@ lazy-lock.json           -- pinned plugin revisions (committed on purpose)
 Leader is `<Space>`. Mode column: **n** normal, **v** visual, **x** visual-block/charwise,
 **i** insert. Anything not listed is stock Neovim.
 
+[which-key](https://github.com/folke/which-key.nvim) is installed: press a prefix
+(`<leader>`, `<leader>f`, `g`, `]`, …) and pause, and it lists what can follow. Prefix
+groups are labelled in `lua/plugins/which-key.lua`; the individual entries come from each
+mapping's own `desc`, so nothing is duplicated. `<leader>fk` is the searchable version.
+
 ### Editing
 
 | Key | Mode | Action |
@@ -88,17 +93,69 @@ same keys as builtin paste, but the pasted text is fitted to the surrounding ind
 
 | Key | Mode | Action |
 | --- | --- | --- |
+| `<leader>/` | n | Fuzzy search within the current buffer |
 | `<leader>ff` | n | Find files |
 | `<leader>fg` | n | Live grep |
 | `<leader>fb` | n | Buffers |
 | `<leader>fh` | n | Help tags |
 | `<leader>fs` | n | Symbols in current file (aerial picker) |
 | `<leader>fS` | n | Symbols across project (LSP, queried live) |
+| `<leader>fw` | n | Grep the word under the cursor across the project |
+| `<leader>fr` | n | Reopen the last picker, query and all |
+| `<leader>fo` | n | Recently opened files |
+| `<leader>fk` | n | Searchable list of every keymap |
+| `<leader>fp` | n | Picker of pickers — reaches all 52 telescope builtins |
 
 `<leader>fs` uses aerial's telescope extension rather than `lsp_document_symbols` —
 it shows the full symbol path and falls back to treesitter, so it works in buffers
 with no server. It is current-buffer only, which is why `<leader>fS` stays on
 telescope's own workspace picker.
+
+All telescope prompts use the native fzf sorter (`telescope-fzf-native`, compiled by the
+`make` step in its spec and loaded via `load_extension("fzf")`), so the prompts accept
+fzf query syntax:
+
+| Query | Matches |
+| --- | --- |
+| `foo` | fuzzy match on `foo` |
+| `'foo` | exact substring `foo` |
+| `^foo` | starts with `foo` |
+| `foo$` | ends with `foo` |
+| `!foo` | does **not** contain `foo` |
+| `foo bar` | both terms (AND) |
+| `foo \| bar` | either term (OR) |
+
+Matching is smart-case: lowercase queries ignore case, any uppercase makes it sensitive.
+
+fzf-native adds no keymaps — it only changes how the query above is matched. The keys
+below are telescope's own defaults, unconfigured here. Press `<C-/>` while typing (or `?`
+after `<Esc>`) inside any picker to see this list live.
+
+**While typing the query:**
+
+| Key | Action |
+| --- | --- |
+| `<C-n>` / `<Down>` | Next result |
+| `<C-p>` / `<Up>` | Previous result |
+| `<CR>` | Open |
+| `<C-x>` | Open in a horizontal split |
+| `<C-v>` | Open in a vertical split |
+| `<C-t>` | Open in a new tab |
+| `<Tab>` / `<S-Tab>` | Toggle multi-select, move down / up |
+| `<C-q>` | Send all results to quickfix and open it |
+| `<M-q>` | Send multi-selected results to quickfix and open it |
+| `<C-u>` / `<C-d>` | Scroll the preview up / down |
+| `<C-r><C-w>` | Insert the word under the cursor into the prompt |
+| `<C-/>` | Show this mapping list |
+| `<C-c>` | Close |
+
+**After `<Esc>` (normal mode in the picker):** `j`/`k` to move, `H`/`M`/`L` for
+top/middle/bottom, `gg`/`G` for first/last, `?` for the mapping list, `<Esc>` to close.
+`<CR>`, `<C-x>`, `<C-v>`, `<C-t>` and `<C-q>` behave the same as above.
+
+Note `<C-u>` / `<C-d>` scroll the *preview* inside a picker — telescope's buffer-local
+maps win over the global half-page-and-recenter ones. `<C-q>` pairs well with
+`<leader>xq`, which opens that quickfix list in Trouble.
 
 ### LSP
 
@@ -189,12 +246,19 @@ paragraph motions. They work without opening the sidebar first — aerial loads 
 | `<leader>gh` | n | Diffview: history for this file |
 | `<leader>gH` | n | Diffview: history for the repo |
 | `<leader>gq` | n | Diffview: close |
+| `<leader>gt` | n | Diffview: toggle split layout (inside diffview only) |
 
 Gitsigns is signs-only here (`+ ~ _ ‾`), no keymaps.
 
 [Diffview](https://github.com/sindrets/diffview.nvim) does not replace gitsigns — it has
 no gutter signs. Gitsigns marks hunks while you edit; diffview is the review surface for
 branch diffs, per-file history, and merge conflicts.
+
+`<leader>gt` is buffer-local to diffview's own windows (the diff, the file list, and the
+history panel) and flips between `diff2_horizontal` (the two versions side by side) and
+`diff2_vertical` (stacked). Those are the only layouts diffview accepts for a regular
+diff — the single-window `diff1_plain` is merge-tool only, so there is no combined or
+inline view to toggle to. Diffview's own `g<C-x>` still works too.
 
 ### Files and history
 
