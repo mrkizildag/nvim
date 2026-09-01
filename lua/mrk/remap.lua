@@ -12,18 +12,23 @@ vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find f
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
--- Symbol search. `lsp_document_symbols` is the fuzzy version of the built-in `gO`
--- (which only dumps to the location list). The workspace picker is the "dynamic"
--- one so the query is re-sent to the server on every keystroke instead of filtering
--- a single up-front result set.
--- Aerial's picker instead of `lsp_document_symbols`: it renders the symbol path and
--- falls back to treesitter, so it also works in buffers with no server attached.
--- It is current-buffer only, so the project-wide picker below stays on telescope's.
+-- Symbol search. The file-level picker is aerial's rather than `lsp_document_symbols`:
+-- it renders the full symbol path and falls back to treesitter, so it works in buffers
+-- with no server attached. Aerial's picker is current-buffer only, so the project-wide
+-- one stays on telescope's "dynamic" variant, which re-sends the query to the server on
+-- every keystroke instead of filtering a single up-front result set.
 vim.keymap.set("n", "<leader>fs", function()
 	require("telescope").load_extension("aerial")
 	require("telescope").extensions.aerial.aerial()
 end, { desc = "Telescope symbols (file)" })
 vim.keymap.set("n", "<leader>fS", builtin.lsp_dynamic_workspace_symbols, { desc = "Telescope symbols (project)" })
+vim.keymap.set("n", "<leader>/", builtin.current_buffer_fuzzy_find, { desc = "Telescope fuzzy find in buffer" })
+vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Telescope grep word under cursor" })
+vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Telescope resume last picker" })
+vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope recent files" })
+vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Telescope keymaps" })
+-- Picker of pickers: reaches the other ~45 builtins without binding each one.
+vim.keymap.set("n", "<leader>fp", builtin.builtin, { desc = "Telescope all pickers" })
 
 -- yazi.nvim
 vim.keymap.set({ "n", "v" }, "<leader>ya", "<cmd>Yazi<cr>", { desc = "Open yazi at the current file" })
@@ -32,7 +37,7 @@ vim.keymap.set({ "n", "v" }, "<leader>ya", "<cmd>Yazi<cr>", { desc = "Open yazi 
 vim.keymap.set({ "n", "v" }, "<leader>gs", "<cmd>Git<cr>", { desc = "Open Git Panel" })
 
 -- undotree.nvim
-vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle undotree" })
 
 -- formatting
 vim.keymap.set({ "n", "v" }, "<leader>F", function()
