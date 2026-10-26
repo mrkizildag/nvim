@@ -74,21 +74,22 @@ return {
     config = function()
       require("onedarkpro").setup({
         -- OneDark Vivid on the near-black background of stock Neovim (NvimDarkGrey2),
-        -- with brighter accents so they still pop on the darker base.
+        -- with brighter accents so they still pop on the darker base. Accents sit at
+        -- 8-10:1 contrast, below fg (11:1), so no accent outshines plain code.
         colors = {
           onedark_vivid = {
             bg = "#14161b",
             black = "#14161b",
             fg = "#c5cad3",
-            red = "#ff5c7a",
+            red = "#ff859b",
             orange = "#ff9e5e",
-            yellow = "#ffd479",
-            green = "#8fe07a",
-            cyan = "#2fd6e0",
+            yellow = "#e1bb6d",
+            green = "#84ce72",
+            cyan = "#2ecdd7",
             blue = "#5cb8ff",
-            purple = "#e270f5",
+            purple = "#e88cf7",
             comment = "#7a8394",
-            cursorline = "#1c1f26",
+            cursorline = "#22262f",
             color_column = "#1a1d23",
             selection = "#2b3140",
             float_bg = "#0f1115",
