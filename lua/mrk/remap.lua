@@ -30,6 +30,16 @@ vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Telescope keymaps" 
 -- Picker of pickers: reaches the other ~45 builtins without binding each one.
 vim.keymap.set("n", "<leader>fp", builtin.builtin, { desc = "Telescope all pickers" })
 
+-- Notes, reachable from any buffer without leaving the current project. The tmux
+-- `prefix N` / `prefix Y` bindings cover starting a notes session from scratch.
+local NOTES_DIR = vim.fn.expand("~/notes")
+vim.keymap.set("n", "<leader>fn", function()
+	builtin.find_files({ cwd = NOTES_DIR, prompt_title = "Notes" })
+end, { desc = "Telescope find notes" })
+vim.keymap.set("n", "<leader>fN", function()
+	builtin.live_grep({ cwd = NOTES_DIR, prompt_title = "Grep notes" })
+end, { desc = "Telescope grep notes" })
+
 -- yazi.nvim
 vim.keymap.set({ "n", "v" }, "<leader>ya", "<cmd>Yazi<cr>", { desc = "Open yazi at the current file" })
 

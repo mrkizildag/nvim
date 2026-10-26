@@ -25,6 +25,9 @@ return {
     },
     config = function()
       local function java_home(version)
+        if vim.fn.executable("/usr/libexec/java_home") ~= 1 then
+          return nil
+        end
         local path = vim.fn.trim(vim.fn.system({ "/usr/libexec/java_home", "-v", version }))
         if vim.v.shell_error ~= 0 or path == "" then
           return nil
@@ -312,11 +315,13 @@ return {
           },
         },
         bashls = {},
-        -- Route clangd through the OrbStack 'eist' Linux machine so C diagnostics match
-        -- Artemis (Linux headers: sem_t is a struct, not int; blocking sem_init; etc.).
+        -- On macOS, route clangd through the OrbStack 'bash' Linux machine so C diagnostics
+        -- match Artemis (Linux headers: sem_t is a struct, not int; blocking sem_init; etc.).
         -- Mac files are mounted at identical paths in the machine, so URIs line up.
-        -- Revert to `clangd = {}` to use the local macOS clangd again.
-        clangd = { cmd = { "orb", "-m", "eist", "clangd", "--background-index" } },
+        -- Inside the Linux machine itself there is no `orb`, so clangd runs directly.
+        clangd = vim.fn.has("mac") == 1
+            and { cmd = { "orb", "-m", "bash", "clangd", "--background-index" } }
+          or { cmd = { "clangd", "--background-index" } },
         -- Lint diagnostics for JS/TS. `ts_ls` only reports type errors, so without this
         -- the eslint configs in the repo (frontend/eslint.config.mjs and friends) are
         -- invisible in the editor. Preferred over nvim-lint because it is a real server:
@@ -425,7 +430,15 @@ return {
         yamlls = {},
       }
 
-      local ensure_installed = vim.tbl_keys(servers)
+      -- Mason has no linux-arm64 clangd (apt provides it), and gopls/ocamllsp/roslyn
+      -- need Go, opam and .NET, which the OrbStack Linux machines don't have.
+      local not_from_mason = vim.fn.has("mac") == 1 and {}
+        or { clangd = true, gopls = true, ocamllsp = true, roslyn_ls = true }
+      local mason_servers = vim.tbl_filter(function(name)
+        return not not_from_mason[name]
+      end, vim.tbl_keys(servers))
+
+      local ensure_installed = vim.deepcopy(mason_servers)
       vim.list_extend(ensure_installed, {
         "stylua",
         "prettierd",
@@ -440,7 +453,7 @@ return {
       end
 
       require("mason-lspconfig").setup({
-        ensure_installed = vim.tbl_keys(servers),
+        ensure_installed = mason_servers,
         automatic_enable = false,
       })
 

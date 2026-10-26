@@ -13,6 +13,7 @@ return {
       { "<leader>g", group = "git" },
       { "<leader>r", group = "run / tasks" },
       { "<leader>x", group = "diagnostics" },
+      { "<leader>v", group = "review (revu)" },
       { "<leader>y", group = "yazi" },
     },
   },

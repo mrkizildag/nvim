@@ -27,6 +27,14 @@ require("lazy").setup({
     { import = "plugins" },
   },
 
+  --- Where local checkouts of my own plugins live. A spec with `dev = true` loads from
+  --- here instead of cloning; `fallback = true` means it still works from GitHub if the
+  --- directory is missing (a fresh machine, say).
+  dev = {
+    path = "~/projects",
+    fallback = true,
+  },
+
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
   checker = { enabled = true },

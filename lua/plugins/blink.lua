@@ -23,7 +23,37 @@ return {
     -- C-k: Toggle signature help (if signature.enabled = true)
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
-    keymap = { preset = 'super-tab' },
+    keymap = {
+      preset = 'super-tab',
+
+      -- Stock super-tab, except in markdown, where Tab and S-Tab nest and
+      -- un-nest the list item under the cursor the way Notion does. Outside a
+      -- list item the handler returns false, which falls through to `fallback`,
+      -- i.e. a plain Tab. This lives here rather than in an ftplugin because
+      -- blink re-applies its buffer-local keymaps on every InsertEnter.
+      ['<Tab>'] = {
+        function(cmp)
+          if vim.bo.filetype == 'markdown' then
+            return require('mrk.markdown_list').indent()
+          end
+          if cmp.snippet_active() then return cmp.accept() end
+          return cmp.select_and_accept()
+        end,
+        'snippet_forward',
+        'fallback',
+      },
+      ['<S-Tab>'] = {
+        function()
+          if vim.bo.filetype ~= 'markdown' then return false end
+          -- Always consume in markdown: outdenting past the left margin should
+          -- do nothing, not fall through to `fallback` and insert whitespace.
+          require('mrk.markdown_list').outdent()
+          return true
+        end,
+        'snippet_backward',
+        'fallback',
+      },
+    },
 
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'

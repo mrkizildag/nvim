@@ -21,6 +21,8 @@ return {
       "json",
       "lua",
       "markdown",
+      -- render-markdown.nvim parses inline spans (links, emphasis, code) from this.
+      "markdown_inline",
       "php",
       "proto",
       "python",

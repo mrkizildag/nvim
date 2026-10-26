@@ -73,6 +73,31 @@ return {
     priority = 1000,
     config = function()
       require("onedarkpro").setup({
+        -- OneDark Vivid on the near-black background of stock Neovim (NvimDarkGrey2),
+        -- with brighter accents so they still pop on the darker base.
+        colors = {
+          onedark_vivid = {
+            bg = "#14161b",
+            black = "#14161b",
+            fg = "#c5cad3",
+            red = "#ff5c7a",
+            orange = "#ff9e5e",
+            yellow = "#ffd479",
+            green = "#8fe07a",
+            cyan = "#2fd6e0",
+            blue = "#5cb8ff",
+            purple = "#e270f5",
+            comment = "#7a8394",
+            cursorline = "#1c1f26",
+            color_column = "#1a1d23",
+            selection = "#2b3140",
+            float_bg = "#0f1115",
+            bg_statusline = "#0f1115",
+            line_number = "#4a5161",
+            indentline = "#262a33",
+            fg_gutter = "#2e333d",
+          },
+        },
         options = {
           terminal_colors = true,
         },
