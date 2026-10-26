@@ -101,6 +101,7 @@ return {
         },
         options = {
           terminal_colors = true,
+          cursorline = true,
         },
       })
     end,
