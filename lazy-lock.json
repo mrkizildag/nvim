@@ -22,6 +22,7 @@
   "overseer.nvim": { "branch": "master", "commit": "a93d9f6d6defdac4bcd6d2c8ba988650e42e0a0e" },
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
   "render-markdown.nvim": { "branch": "main", "commit": "8e8795368391036643b622875a6da6a51bcd33f4" },
+  "reviewr.nvim": { "branch": "main", "commit": "0c97dcaabcca99b16bb6c68b0c1197e0e8ab08f6" },
   "rose-pine": { "branch": "main", "commit": "ff483051a47e27d84bdef47703538df1ed9f4a47" },
   "smart-paste.nvim": { "branch": "main", "commit": "dc70a09bd61266744526557944c5f0b084f0f4f8" },
   "stickybuf.nvim": { "branch": "master", "commit": "9e00edfd94baef4a78b4248ae8309a2d4943f118" },
