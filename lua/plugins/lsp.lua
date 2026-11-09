@@ -315,12 +315,12 @@ return {
           },
         },
         bashls = {},
-        -- On macOS, route clangd through the OrbStack 'bash' Linux machine so C diagnostics
+        -- On macOS, route clangd through the OrbStack 'linux' machine so C diagnostics
         -- match Artemis (Linux headers: sem_t is a struct, not int; blocking sem_init; etc.).
         -- Mac files are mounted at identical paths in the machine, so URIs line up.
         -- Inside the Linux machine itself there is no `orb`, so clangd runs directly.
         clangd = vim.fn.has("mac") == 1
-            and { cmd = { "orb", "-m", "bash", "clangd", "--background-index" } }
+            and { cmd = { "orb", "-m", "linux", "clangd", "--background-index" } }
           or { cmd = { "clangd", "--background-index" } },
         -- Lint diagnostics for JS/TS. `ts_ls` only reports type errors, so without this
         -- the eslint configs in the repo (frontend/eslint.config.mjs and friends) are
